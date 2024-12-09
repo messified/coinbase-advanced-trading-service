@@ -1,37 +1,39 @@
-import { Injectable } from '@nestjs/common';
+
+import { Injectable, Logger } from '@nestjs/common';
 import { CoinbaseService } from '../coinbase/coinbase.service';
-import { TradeAnalysisService } from '../trade-analysis/trade-analysis.service';
-import { ProfitGatheringService } from '../profit-gathering/profit-gathering.service';
 import { ConfigService } from '../config/config.service';
+import { Trade } from '../../interfaces/coinbase.interface';
 
 @Injectable()
 export class TradingService {
+  private readonly logger = new Logger(TradingService.name);
+
   constructor(
     private readonly coinbaseService: CoinbaseService,
-    private readonly tradeAnalysisService: TradeAnalysisService,
-    private readonly profitGatheringService: ProfitGatheringService,
     private readonly configService: ConfigService,
   ) {}
 
   async analyzeAndTrade() {
-    const allPairs = await this.coinbaseService.getTradingPairs();
-    const analyzedPairs = this.tradeAnalysisService.analyzePairs(allPairs);
     const priorityCoins = this.configService.getPriorityCoins();
-    const optimalPairs = this.tradeAnalysisService.prioritizePairs(analyzedPairs, priorityCoins);
+    const wallets = await this.coinbaseService.listWallets();
 
-    for (const pair of optimalPairs) {
-      const currentPrice = parseFloat(pair.price);
-      const entryPrice = currentPrice * 0.95;
-      const size = 0.01;
+    for (const coin of priorityCoins) {
+      const wallet = wallets.find(w => w.name === coin);
+      if (!wallet) {
+        this.logger.warn(`Wallet for ${coin} not found.`);
+        continue;
+      }
 
-      await this.coinbaseService.executeTrade(pair.id, 'buy', size);
-
-      await this.profitGatheringService.gatherProfit(
-        { productId: pair.id, entryPrice, size },
-        currentPrice,
-        5,
-        this.coinbaseService.executeTrade.bind(this.coinbaseService),
-      );
+      try {
+        this.logger.log(`Trading ${coin}...`);
+        await this.coinbaseService.createTrade(wallet.id, {
+          amount: '0.01',
+          fromAssetId: 'eth', // Fixed undefined `Coinbase.assets`
+          toAssetId: 'usdc', // Fixed undefined `Coinbase.assets`
+        } as Trade);
+      } catch (error) {
+        this.logger.error(`Error trading ${coin}:`, error.message);
+      }
     }
   }
 }

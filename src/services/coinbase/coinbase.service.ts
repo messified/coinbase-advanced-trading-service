@@ -1,37 +1,52 @@
-import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
-import { firstValueFrom } from 'rxjs';
+
+import { Injectable, Logger } from '@nestjs/common';
+import { Coinbase, Wallet } from '@coinbase/coinbase-sdk';
+import { ConfigService } from '../config/config.service';
+import { Transfer, Trade } from '../../interfaces/coinbase.interface';
 
 @Injectable()
 export class CoinbaseService {
-  private readonly apiBase = 'https://api.coinbase.com/v2';
+  private readonly logger = new Logger(CoinbaseService.name);
 
-  constructor(private readonly httpService: HttpService) {}
+  constructor(private readonly configService: ConfigService) {
+    const apiKeyName = process.env.COINBASE_API_KEY_NAME;
+    const privateKey = process.env.COINBASE_PRIVATE_KEY;
 
-  async getTradingPairs(): Promise<any[]> {
+    if (!apiKeyName || !privateKey) {
+      throw new Error('Coinbase API key name or private key missing in .env file');
+    }
+
+    Coinbase.configure({ apiKeyName, privateKey });
+  }
+
+  async listWallets(): Promise<any[]> {
     try {
-      const response = await firstValueFrom(
-        this.httpService.get(`${this.apiBase}/products`),
-      );
-      return response.data.data;
+      const response = await Wallet.listWallets();
+      return response.data.map((wallet: any) => ({
+        id: wallet.id,
+        name: wallet.name,
+        defaultAddress: wallet.defaultAddress,
+        networkId: wallet.networkId,
+      }));
     } catch (error) {
-      console.error('Error fetching trading pairs:', error.message);
+      this.logger.error('Error listing wallets:', error.message);
       throw error;
     }
   }
 
-  async executeTrade(productId: string, side: 'buy' | 'sell', size: number): Promise<any> {
+  async createTrade(walletId: string, trade: Trade): Promise<any> {
     try {
-      const order = {
-        product_id: productId,
-        side,
-        order_type: 'market',
-        size: size.toFixed(8),
-      };
-      console.log(`Executing ${side} order for ${productId} with size ${size}`);
-      return { success: true, order };
+      const wallet = await Wallet.fetch(walletId);
+      let transaction = await wallet.createTrade({
+        amount: parseInt(trade.amount), // Fixed amount type issue
+        fromAssetId: trade.fromAssetId,
+        toAssetId: trade.toAssetId,
+      });
+      transaction = await transaction.wait();
+      this.logger.log(`Trade completed: ${transaction}`);
+      return transaction;
     } catch (error) {
-      console.error('Error executing trade:', error.message);
+      this.logger.error('Error creating trade:', error.message);
       throw error;
     }
   }
