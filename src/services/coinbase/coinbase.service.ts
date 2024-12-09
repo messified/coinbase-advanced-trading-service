@@ -50,4 +50,8 @@ export class CoinbaseService {
       throw error;
     }
   }
+
+  async createWallet(): Promise<any> {
+    return await Wallet.create();
+  }
 }

@@ -8,13 +8,14 @@ import { TradingService } from './services/trading/trading.service';
 import { TradeAnalysisService } from './services/trade-analysis/trade-analysis.service';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
+import { TradingController } from './api/trading/trading.controller';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     HttpModule
   ],
-  controllers: [AppController],
+  controllers: [AppController, TradingController],
   providers: [
     CoinbaseService,
     TradeAnalysisService,
