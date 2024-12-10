@@ -1,31 +1,30 @@
-
 import { Injectable, Logger } from '@nestjs/common';
 import { Coinbase, Wallet } from '@coinbase/coinbase-sdk';
 import { ConfigService } from '../config/config.service';
-import { Transfer, Trade } from '../../interfaces/coinbase.interface';
+import { Trade, TradeResponse, WalletResponse } from '../../interfaces/coinbase.interface';
 
 @Injectable()
 export class CoinbaseService {
   private readonly logger = new Logger(CoinbaseService.name);
 
   constructor(private readonly configService: ConfigService) {
-    const apiKeyName = process.env.COINBASE_API_KEY_NAME;
-    const privateKey = process.env.COINBASE_PRIVATE_KEY;
+    const apiKeyName = this.configService.get('COINBASE_API_KEY_NAME');
+    const privateKey = this.configService.get('COINBASE_PRIVATE_KEY');
 
     if (!apiKeyName || !privateKey) {
-      throw new Error('Coinbase API key name or private key missing in .env file');
+      throw new Error('Coinbase API key name or private key missing');
     }
 
     Coinbase.configure({ apiKeyName, privateKey });
   }
 
-  async listWallets(): Promise<any[]> {
+  async listWallets(): Promise<WalletResponse[]> {
     try {
       const response = await Wallet.listWallets();
-      return response.data.map((wallet: any) => ({
+      return response.data.map((wallet: any): WalletResponse => ({
         id: wallet.id,
-        name: wallet.name,
-        defaultAddress: wallet.defaultAddress,
+        name: wallet.name || '',
+        defaultAddress: wallet.defaultAddress || '',
         networkId: wallet.networkId,
       }));
     } catch (error) {
@@ -34,24 +33,54 @@ export class CoinbaseService {
     }
   }
 
-  async createTrade(walletId: string, trade: Trade): Promise<any> {
+  async createTrade(walletId: string, trade: Trade): Promise<TradeResponse> {
     try {
       const wallet = await Wallet.fetch(walletId);
       let transaction = await wallet.createTrade({
-        amount: parseInt(trade.amount), // Fixed amount type issue
+        amount: parseFloat(trade.amount),
         fromAssetId: trade.fromAssetId,
         toAssetId: trade.toAssetId,
       });
       transaction = await transaction.wait();
-      this.logger.log(`Trade completed: ${transaction}`);
-      return transaction;
+      return this.mapTradeResponse(transaction);
     } catch (error) {
-      this.logger.error('Error creating trade:', error.message);
+      this.logger.error(`Error creating trade for wallet ID: ${walletId}`, error.message);
       throw error;
     }
   }
 
-  async createWallet(): Promise<any> {
-    return await Wallet.create();
+  async createWallet(): Promise<WalletResponse> {
+    try {
+      const wallet = await Wallet.create();
+      return this.mapWalletResponse(wallet);
+    } catch (error) {
+      this.logger.error('Error creating wallet:', error.message);
+      throw error;
+    }
+  }
+
+  private mapWalletResponse(wallet: any): WalletResponse {
+    if (!wallet.id || !wallet.networkId) {
+      throw new Error('Invalid wallet response from SDK');
+    }
+    return {
+      id: wallet.id,
+      name: wallet.name || '',
+      defaultAddress: wallet.defaultAddress || '',
+      networkId: wallet.networkId,
+    };
+  }
+
+  private mapTradeResponse(trade: any): TradeResponse {
+    if (!trade.id || !trade.status) {
+      throw new Error('Invalid trade response from SDK');
+    }
+    return {
+      id: trade.id,
+      status: trade.status,
+      amount: trade.amount,
+      fromAssetId: trade.fromAssetId,
+      toAssetId: trade.toAssetId,
+    };
   }
 }
