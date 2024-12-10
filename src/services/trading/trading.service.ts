@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CoinbaseService } from '../coinbase/coinbase.service';
-import { ConfigService } from '../config/config.service';
+import { CustomConfigService } from '../config/custom-config.service';
 import { Trade } from '../../interfaces/coinbase.interface';
 
 @Injectable()
@@ -9,7 +9,7 @@ export class TradingService {
 
   constructor(
     private readonly coinbaseService: CoinbaseService,
-    private readonly configService: ConfigService,
+    private readonly configService: CustomConfigService,
   ) {}
 
   /**

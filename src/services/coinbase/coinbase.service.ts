@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Coinbase, Wallet } from '@coinbase/coinbase-sdk';
-import { ConfigService } from '../config/config.service';
 import { Trade, TradeResponse, WalletResponse } from '../../interfaces/coinbase.interface';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CoinbaseService {

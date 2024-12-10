@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ConfigService } from '../config/config.service';
+import { CustomConfigService } from '../config/custom-config.service';
 import { CoinbaseService } from '../coinbase/coinbase.service';
 import { TradingService } from '../trading/trading.service';
 
 describe('TradingService', () => {
   let service: TradingService;
-  let mockConfigService: Partial<ConfigService>;
+  let mockConfigService: Partial<CustomConfigService>;
   let mockCoinbaseService: Partial<CoinbaseService>;
 
   beforeEach(async () => {
@@ -24,7 +24,7 @@ describe('TradingService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         TradingService,
-        { provide: ConfigService, useValue: mockConfigService },
+        { provide: CustomConfigService, useValue: mockConfigService },
         { provide: CoinbaseService, useValue: mockCoinbaseService },
       ],
     }).compile();
