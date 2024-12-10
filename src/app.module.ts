@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TradingController } from './api/trading/trading.controller';
 import { CoinbaseService } from './services/coinbase/coinbase.service';
 import { ConfigService } from './services/config/config.service';
@@ -17,9 +15,8 @@ import { TradingService } from './services/trading/trading.service';
     }),
     HttpModule,
   ],
-  controllers: [AppController, TradingController],
+  controllers: [TradingController],
   providers: [
-    AppService,
     ConfigService,
     CoinbaseService,
     TradeAnalysisService,
