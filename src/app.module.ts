@@ -7,6 +7,7 @@ import { CustomConfigService } from './services/config/custom-config.service';
 import { ProfitGatheringService } from './services/profit-gathering/profit-gathering.service';
 import { TradeAnalysisService } from './services/trade-analysis/trade-analysis.service';
 import { TradingService } from './services/trading/trading.service';
+import { MarketAnalysisService } from './services/market-analysis/market-analysis.service';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { TradingService } from './services/trading/trading.service';
       useValue: 10, // Configure the profit threshold value here
     },
     ProfitGatheringService,
+    MarketAnalysisService,
     TradingService,
   ],
 })

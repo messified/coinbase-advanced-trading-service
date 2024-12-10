@@ -12,10 +12,6 @@ export class TradingController {
 
   constructor(private readonly tradingService: TradingService) {}
 
-  /**
-   * Endpoint to trigger the analyze-and-trade process.
-   * @returns A success response if the process executes without errors.
-   */
   @Get('/analyze-and-trade')
   async analyzeAndTrade() {
     try {
@@ -32,13 +28,27 @@ export class TradingController {
     }
   }
 
-  /**
-   * Endpoint to analyze trading data without initiating trades.
-   */
   @Get('/analyze')
   async analyze() {
     this.logger.log('Retrieving analytics data...');
     const analysis = await this.tradingService.analyzeOnly();
     return { success: true, data: analysis };
+  }
+
+  /**
+   * New endpoint to get market analysis data.
+   */
+  @Get('/market-analysis')
+  async marketAnalysis() {
+    this.logger.log('Retrieving market analysis data...');
+    try {
+      const analysis = await this.tradingService.getMarketAnalysis();
+      return { success: true, data: analysis };
+    } catch (error) {
+      this.logger.error('Error retrieving market analysis data:', error.message);
+      throw new InternalServerErrorException(
+        'An error occurred while retrieving market analysis data.',
+      );
+    }
   }
 }

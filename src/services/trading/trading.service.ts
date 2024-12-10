@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { CoinbaseService } from '../coinbase/coinbase.service';
 import { CustomConfigService } from '../config/custom-config.service';
 import { Trade } from '../../interfaces/coinbase.interface';
+import { MarketAnalysisService } from '../market-analysis/market-analysis.service';
 
 @Injectable()
 export class TradingService {
@@ -10,6 +11,7 @@ export class TradingService {
   constructor(
     private readonly coinbaseService: CoinbaseService,
     private readonly configService: CustomConfigService,
+    private readonly marketAnalysisService: MarketAnalysisService, // Injected here
   ) {}
 
   /**
@@ -51,7 +53,7 @@ export class TradingService {
     }
   }
 
-    async analyzeOnly(): Promise<any[]> {
+  async analyzeOnly(): Promise<any[]> {
     const priorityCoins = this.configService.getPriorityCoins();
     this.logger.log(`Analyzing priority coins: ${priorityCoins.join(', ')}`);
 
@@ -68,5 +70,12 @@ export class TradingService {
     });
 
     return analysis;
+  }
+
+  /**
+   * Get market analysis results (best short-term, best long-term, and priority coins highlighted).
+   */
+  async getMarketAnalysis():Promise<any> {
+    return this.marketAnalysisService.analyzeMarket();
   }
 }

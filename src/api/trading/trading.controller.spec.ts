@@ -1,31 +1,48 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TradingController } from './trading.controller';
+import { CoinbaseService } from 'src/services/coinbase/coinbase.service';
+import { CustomConfigService } from 'src/services/config/custom-config.service';
+import { MarketAnalysisService } from 'src/services/market-analysis/market-analysis.service';
 import { TradingService } from 'src/services/trading/trading.service';
 
-describe('TradingController', () => {
-  let controller: TradingController;
+
+describe('TradingService - Market Analysis', () => {
   let tradingService: TradingService;
+  let coinbaseService: Partial<jest.Mocked<CoinbaseService>>;
+  let configService: Partial<jest.Mocked<CustomConfigService>>;
+  let marketAnalysisService: Partial<jest.Mocked<MarketAnalysisService>>;
 
   beforeEach(async () => {
+    coinbaseService = {};
+    configService = {};
+    marketAnalysisService = {
+      analyzeMarket: jest.fn(),
+    };
+
+    (marketAnalysisService.analyzeMarket as jest.Mock).mockResolvedValue({
+      bestShortTermCoins: ['ETH'],
+      bestLongTermCoins: ['BTC'],
+      priorityCoinsHighlighted: ['BTC'],
+    });
+
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [TradingController],
       providers: [
-        {
-          provide: TradingService,
-          useValue: {
-            analyzeAndTrade: jest.fn().mockResolvedValue(undefined),
-          },
-        },
+        TradingService,
+        { provide: CoinbaseService, useValue: coinbaseService },
+        { provide: CustomConfigService, useValue: configService },
+        { provide: MarketAnalysisService, useValue: marketAnalysisService },
       ],
     }).compile();
 
-    controller = module.get<TradingController>(TradingController);
     tradingService = module.get<TradingService>(TradingService);
   });
 
-  it('should execute analyze-and-trade and return success response', async () => {
-    const result = await controller.analyzeAndTrade();
-    expect(result).toEqual({ success: true, message: 'Trading process executed successfully.' });
-    expect(tradingService.analyzeAndTrade).toHaveBeenCalled();
+  it('getMarketAnalysis should return market analysis results', async () => {
+    const result = await tradingService.getMarketAnalysis();
+    expect(marketAnalysisService.analyzeMarket).toHaveBeenCalled();
+    expect(result).toEqual({
+      bestShortTermCoins: ['ETH'],
+      bestLongTermCoins: ['BTC'],
+      priorityCoinsHighlighted: ['BTC'],
+    });
   });
 });
