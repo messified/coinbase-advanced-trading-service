@@ -2,20 +2,58 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Coinbase, Wallet } from '@coinbase/coinbase-sdk';
 import { Trade, TradeResponse, WalletResponse } from '../../interfaces/coinbase.interface';
 import { ConfigService } from '@nestjs/config';
+import * as crypto from 'crypto';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class CoinbaseService {
   private readonly logger = new Logger(CoinbaseService.name);
 
-  constructor(private readonly configService: ConfigService) {
-    const apiKeyName = this.configService.get('COINBASE_API_KEY_NAME');
-    const privateKey = this.configService.get('COINBASE_PRIVATE_KEY');
+  private readonly apiKeyName: string;
+  private readonly privateKey: string;
+  private readonly algorithm = 'ES256';
+  private readonly requestMethod = 'GET';
+  private readonly requestHost = 'api.coinbase.com';
+  private readonly requestPath = '/api/v3/brokerage/accounts';
+  private readonly uri: string;
 
-    if (!apiKeyName || !privateKey) {
+  constructor(private readonly configService: ConfigService) {
+    this.apiKeyName = this.configService.get('COINBASE_API_KEY_NAME');
+    this.privateKey = this.configService.get('COINBASE_PRIVATE_KEY');
+
+    if (!this.apiKeyName || !this.privateKey) {
       throw new Error('Coinbase API key name or private key missing');
     }
 
-    Coinbase.configure({ apiKeyName, privateKey });
+    this.uri = `${this.requestMethod} ${this.requestHost}${this.requestPath}`;
+
+    // Configure Coinbase with the provided credentials
+    Coinbase.configure({ apiKeyName: this.apiKeyName, privateKey: this.privateKey });
+  }
+
+  async generateJWT(): Promise<string> {
+    const payload = {
+      iss: 'cdp',
+      nbf: Math.floor(Date.now() / 1000),
+      exp: Math.floor(Date.now() / 1000) + 120,
+      sub: this.apiKeyName,
+      uri: this.uri,
+    };
+
+    const header = {
+      alg: this.algorithm,
+      kid: this.apiKeyName,
+      nonce: crypto.randomBytes(16).toString('hex'),
+    };
+
+    // For ES256 (ECDSA), privateKey should be an appropriate ECDSA key.
+    // The `jwt.sign` options object requires named keys, not `this.algorithm` inline.
+    const options: jwt.SignOptions = {
+      algorithm: this.algorithm as jwt.Algorithm,
+      header,
+    };
+
+    return jwt.sign(payload, this.privateKey, options);
   }
 
   async listWallets(): Promise<WalletResponse[]> {

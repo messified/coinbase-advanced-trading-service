@@ -1,4 +1,11 @@
-## **Trading Service**
+# **Coinbase Trading App**
+
+Author: **Jesse Reese**  
+Website: [https://jessereese.com/](https://jessereese.com/)  
+LinkedIn: [https://www.linkedin.com/in/jcreese/](https://www.linkedin.com/in/jcreese/)  
+Medium: [https://medium.com/@Jesse_Reese](https://medium.com/@Jesse_Reese)  
+Github: [https://github.com/messified](https://github.com/messified)
+
 
 A comprehensive NestJS-based trading service for analyzing trading pairs, executing trades, and gathering profits. This project integrates with the Coinbase SDK and provides robust services for trading operations.
 

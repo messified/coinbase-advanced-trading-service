@@ -4,13 +4,17 @@ import {
   Logger,
   InternalServerErrorException,
 } from '@nestjs/common';
+import { CoinbaseService } from 'src/services/coinbase/coinbase.service';
 import { TradingService } from 'src/services/trading/trading.service';
 
 @Controller('/api/trading')
 export class TradingController {
   private readonly logger = new Logger(TradingController.name);
 
-  constructor(private readonly tradingService: TradingService) {}
+  constructor(
+    private readonly tradingService: TradingService,
+    private readonly coinbaseService: CoinbaseService
+  ) {}
 
   @Get('/analyze-and-trade')
   async analyzeAndTrade() {
@@ -49,6 +53,15 @@ export class TradingController {
       throw new InternalServerErrorException(
         'An error occurred while retrieving market analysis data.',
       );
+    }
+  }
+
+  @Get('/jwt-token')
+  async getJwtToken() {
+    try {
+      return this.coinbaseService.generateJWT();
+    } catch (error) {
+        throw new InternalServerErrorException('An error occurred while retrieving a JWT Token.')
     }
   }
 }
