@@ -8,6 +8,7 @@ import { ProfitGatheringService } from './services/profit-gathering/profit-gathe
 import { TradeAnalysisService } from './services/trade-analysis/trade-analysis.service';
 import { TradingService } from './services/trading/trading.service';
 import { MarketAnalysisService } from './services/market-analysis/market-analysis.service';
+import { ProductsService } from './services/products/products.service';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { MarketAnalysisService } from './services/market-analysis/market-analysi
     ProfitGatheringService,
     MarketAnalysisService,
     TradingService,
+    ProductsService,
   ],
 })
 export class AppModule {}
