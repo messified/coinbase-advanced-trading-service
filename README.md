@@ -89,29 +89,35 @@ Base URL: `/api/trading`
 
 ```plaintext
 src/
-├── api/
-│   └── trading/
-│       ├── trading.controller.ts   # Handles trading-related API requests
-│       └── trading.controller.spec.ts  # Unit tests for TradingController
-├── services/
-│   ├── coinbase/
-│   │   ├── coinbase.service.ts    # Manages integration with Coinbase SDK
-│   │   └── coinbase.service.spec.ts  # Unit tests for CoinbaseService
-│   ├── config/
-│   │   ├── config.service.ts      # Provides application configuration
-│   │   └── config.service.spec.ts # Unit tests for ConfigService
-│   ├── profit-gathering/
-│   │   ├── profit-gathering.service.ts # Handles profit gathering logic
-│   │   └── profit-gathering.service.spec.ts # Unit tests for ProfitGatheringService
-│   ├── trade-analysis/
-│   │   ├── trade-analysis.service.ts # Provides trading pair analysis functionality
-│   │   └── trade-analysis.service.spec.ts # Unit tests for TradeAnalysisService
-│   └── trading/
-│       ├── trading.service.ts     # Core trading service
-│       └── trading.service.spec.ts # Unit tests for TradingService
-├── app.module.ts                  # Main application module
-├── app.controller.ts              # Root application controller
-└── app.service.ts                 # Root application service
+.
+├── api
+│   └── trading
+│       ├── trading.controller.spec.ts
+│       └── trading.controller.ts
+├── app.module.ts
+├── interfaces
+│   └── coinbase.interface.ts
+├── main.ts
+└── services
+    ├── coinbase
+    │   ├── coinbase.service.spec.ts
+    │   └── coinbase.service.ts
+    ├── config
+    │   ├── custom-config.service.spec.ts
+    │   └── custom-config.service.ts
+    ├── market-analysis
+    │   ├── market-analysis.service.spec.ts
+    │   └── market-analysis.service.ts
+    ├── profit-gathering
+    │   ├── profit-gathering.service.spec.ts
+    │   └── profit-gathering.service.ts
+    ├── trade-analysis
+    │   ├── trade-analysis.service.spec.ts
+    │   └── trade-analysis.service.ts
+    └── trading
+        ├── trading.scheduler.ts
+        ├── trading.service.spec.ts
+        └── trading.service.ts
 ```
 
 ---
