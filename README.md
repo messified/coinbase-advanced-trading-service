@@ -10,7 +10,7 @@ A comprehensive trading service for analyzing trading pairs, executing trades, a
 
 ---
 ### Project Status: Early Development
-
+```bash
  PASS  src/services/trade-analysis/trade-analysis.service.spec.ts
  PASS  src/services/config/custom-config.service.spec.ts
  PASS  src/services/market-analysis/market-analysis.service.spec.ts
@@ -46,6 +46,8 @@ Test Suites: 1 failed, 6 passed, 7 total
 Tests:       31 passed, 31 total
 Snapshots:   0 total
 Time:        9.995 s
+```
+
 ---
 
 ### **Features**
