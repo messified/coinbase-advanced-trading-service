@@ -5,7 +5,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { TradingService } from 'src/services/trading/trading.service';
-import { ProductsService } from '../../services/products/products.service';
+import { ProductService } from '../../services/product/product.service';
 
 @Controller('/api/trading')
 export class TradingController {
@@ -13,7 +13,7 @@ export class TradingController {
 
   constructor(
     private readonly tradingService: TradingService,
-    private readonly productsService: ProductsService
+    private readonly productsService: ProductService
   ) {}
 
   @Get('/analyze-and-trade')
@@ -63,8 +63,9 @@ export class TradingController {
   @Get('/products')
   async testPoint() {
     this.logger.log('Retrieving Product data...');
-    const response = await this.productsService.getProducts();
-    console.log(response);
-    return { success: true, data: response };
+    
+    const products = await this.productsService.getProducts();
+
+    return { success: true, data: products };
   }
 }
