@@ -1,11 +1,12 @@
 # **Coinbase Trading Service - NestJS**
 
-Author: **Jesse Reese**  
-Website: [https://jessereese.com/](https://jessereese.com/)  
-LinkedIn: [https://www.linkedin.com/in/jcreese/](https://www.linkedin.com/in/jcreese/)  
-Medium: [https://medium.com/@Jesse_Reese](https://medium.com/@Jesse_Reese)  
-Github: [https://github.com/messified](https://github.com/messified)
+ - Author: **Jesse Reese**  
+ - Website: [https://jessereese.com/](https://jessereese.com/)  
+ - LinkedIn: [https://www.linkedin.com/in/jcreese/](https://www.linkedin.com/in/jcreese/)  
+ - Medium: [https://medium.com/@Jesse_Reese](https://medium.com/@Jesse_Reese)  
+ - Github: [https://github.com/messified](https://github.com/messified)
 
+### Project Status:Early Development
 
 A comprehensive trading service for analyzing trading pairs, executing trades, and gathering profits. This project integrates with the Coinbase SDK and provides robust services for trading operations.
 
@@ -20,6 +21,9 @@ A comprehensive trading service for analyzing trading pairs, executing trades, a
 - **Trading Operations**:
   - Automatically execute trades for prioritized coins.
   - Integrate with Coinbase SDK for wallet and trade management.
+
+- **Automated Trading & Automated Profit Gathering**:
+  - Automate trading, profit gathering, and or reinvesting.
 
 - **Profit Gathering**:
   - Calculate and gather unrealized profits above a configurable threshold.
@@ -36,7 +40,7 @@ A comprehensive trading service for analyzing trading pairs, executing trades, a
 
 2. Navigate to the project directory:
    ```bash
-   cd trading-service
+   cd coinbase-advanced-trading-service
    ```
 
 3. Install dependencies:
@@ -46,10 +50,16 @@ A comprehensive trading service for analyzing trading pairs, executing trades, a
 
 4. Set up your environment variables in a `.env` file:
    ```dotenv
-   COINBASE_API_KEY_NAME=your_api_key_name
-   COINBASE_PRIVATE_KEY=your_private_key
-   PRIORITY_COINS=BTC,ETH,SOL
-   INVESTMENT=1000
+    PRIORITY_COINS=BTC,ETH,SOL,ADA,XRP,DNT,PEPE,AMP
+    INVESTMENT=10 //USD $10.00
+    COINBASE_API_KEY_NAME=''
+    COINBASE_PRIVATE_KEY=''
+    BASE_URL = 'api.coinbase.com';
+    API_PREFIX = '/api/v3/brokerage';
+    ALGORITHM = 'ES256';
+    VERSION = '0.1.0';
+    USER_AGENT = 'coinbase-advanced-ts/0.1.0';
+    JWT_ISSUER = 'cdp';
    ```
 
 ---
