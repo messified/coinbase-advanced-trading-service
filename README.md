@@ -50,8 +50,8 @@ A comprehensive trading service for analyzing trading pairs, executing trades, a
 
 4. Set up your environment variables in a `.env` file:
    ```dotenv
-    PRIORITY_COINS=BTC,ETH,SOL,ADA,XRP,DNT,PEPE,AMP
-    INVESTMENT=10 //USD $10.00
+    PRIORITY_COINS='BTC,ETH,SOL,ADA,XRP,DNT,PEPE,AMP'
+    INVESTMENT=10
     COINBASE_API_KEY_NAME=''
     COINBASE_PRIVATE_KEY=''
     BASE_URL = 'api.coinbase.com';
