@@ -5,13 +5,15 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { TradingService } from 'src/services/trading/trading.service';
+import { ProductsService } from '../../services/products/products.service';
 
 @Controller('/api/trading')
 export class TradingController {
   private readonly logger = new Logger(TradingController.name);
 
   constructor(
-    private readonly tradingService: TradingService
+    private readonly tradingService: TradingService,
+    private readonly productsService: ProductsService
   ) {}
 
   @Get('/analyze-and-trade')
@@ -52,5 +54,17 @@ export class TradingController {
         'An error occurred while retrieving market analysis data.',
       );
     }
+  }
+
+  /**
+   * DEV ONLY
+   * @returns
+   */
+  @Get('/products')
+  async testPoint() {
+    this.logger.log('Retrieving Product data...');
+    const response = await this.productsService.getProducts();
+    console.log(response);
+    return { success: true, data: response };
   }
 }

@@ -14,7 +14,7 @@ export class CoinbaseService {
   private readonly algorithm = 'ES256';
   private readonly requestMethod = 'GET';
   private readonly requestHost = 'api.coinbase.com';
-  private readonly requestPath = '/api/v3/brokerage/accounts';
+  private readonly requestPath = '/api/v3/brokerage/products';
   private readonly uri: string;
 
   constructor(private readonly configService: ConfigService) {
@@ -31,13 +31,13 @@ export class CoinbaseService {
     Coinbase.configure({ apiKeyName: this.apiKeyName, privateKey: this.privateKey });
   }
 
-  async generateJWT(): Promise<string> {
+  generateJWT(): string {
     const payload = {
       iss: 'cdp',
       nbf: Math.floor(Date.now() / 1000),
       exp: Math.floor(Date.now() / 1000) + 120,
       sub: this.apiKeyName,
-      uri: this.uri,
+      uri: this.uri
     };
 
     const header = {
@@ -46,12 +46,17 @@ export class CoinbaseService {
       nonce: crypto.randomBytes(16).toString('hex'),
     };
 
+    console.log(header);
+
     // For ES256 (ECDSA), privateKey should be an appropriate ECDSA key.
     // The `jwt.sign` options object requires named keys, not `this.algorithm` inline.
     const options: jwt.SignOptions = {
-      algorithm: this.algorithm as jwt.Algorithm,
+      algorithm: 'ES256' as jwt.Algorithm,
       header,
     };
+
+    console.log(options);
+    console.log(payload);
 
     return jwt.sign(payload, this.privateKey, options);
   }
