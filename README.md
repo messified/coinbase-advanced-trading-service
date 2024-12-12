@@ -134,44 +134,6 @@ src/
 
 ---
 
-### **Development Guidelines**
-
-1. **Testing**:
-   - Write unit tests for all services and controllers.
-   - Run tests frequently to ensure functionality remains intact.
-
-2. **Code Linting**:
-   - Use ESLint to maintain consistent code style.
-   - Run linting:
-     ```bash
-     npm run lint
-     ```
-
-3. **Error Handling**:
-   - Wrap all service calls in `try-catch` blocks.
-   - Use `Logger` for structured logging of errors and events.
-
----
-
-### **Contributing**
-
-1. Fork the repository.
-2. Create a new feature branch:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-3. Commit your changes:
-   ```bash
-   git commit -m "Add your message here"
-   ```
-4. Push to the branch:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-5. Open a pull request.
-
----
-
 ### **License**
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
