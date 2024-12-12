@@ -6,10 +6,46 @@
  - Medium: [https://medium.com/@Jesse_Reese](https://medium.com/@Jesse_Reese)  
  - Github: [https://github.com/messified](https://github.com/messified)
 
-### Project Status: **Early Development**
-
 A comprehensive trading service for analyzing trading pairs, executing trades, and gathering profits. This project integrates with the Coinbase SDK and provides robust services for trading operations.
 
+---
+### Project Status: Early Development
+
+ PASS  src/services/trade-analysis/trade-analysis.service.spec.ts
+ PASS  src/services/config/custom-config.service.spec.ts
+ PASS  src/services/market-analysis/market-analysis.service.spec.ts
+ PASS  src/services/coinbase/coinbase.service.spec.ts
+ PASS  src/services/trading/trading.service.spec.ts (5.615 s)
+-------------------------------|---------|----------|---------|---------|-------------------
+File                           | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+-------------------------------|---------|----------|---------|---------|-------------------
+All files                      |   48.96 |    69.44 |   56.81 |   47.44 |
+ src                           |       0 |        0 |       0 |       0 |
+  app.module.ts                |       0 |      100 |     100 |       0 | 1-35
+  main.ts                      |       0 |        0 |       0 |       0 | 1-8
+ src/api/trading               |       0 |      100 |       0 |       0 |
+  trading.controller.ts        |       0 |      100 |       0 |       0 | 1-68
+ src/services/coinbase         |   86.27 |    76.47 |    87.5 |   85.41 |
+  coinbase.service.ts          |   86.27 |    76.47 |    87.5 |   85.41 | 35-61
+ src/services/config           |     100 |      100 |     100 |     100 |
+  custom-config.service.ts     |     100 |      100 |     100 |     100 |
+ src/services/market-analysis  |     100 |      100 |     100 |     100 |
+  market-analysis.service.ts   |     100 |      100 |     100 |     100 |
+ src/services/products         |       0 |      100 |       0 |       0 |
+  products.service.ts          |       0 |      100 |       0 |       0 | 1-46
+ src/services/profit-gathering |     100 |      100 |     100 |     100 |
+  profit-gathering.service.ts  |     100 |      100 |     100 |     100 |
+ src/services/trade-analysis   |     100 |      100 |     100 |     100 |
+  trade-analysis.service.ts    |     100 |      100 |     100 |     100 |
+ src/services/trading          |      20 |        0 |   11.11 |   18.36 |
+  trading.scheduler.ts         |       0 |      100 |       0 |       0 | 2-19
+  trading.service.ts           |   26.82 |        0 |   14.28 |   24.32 | 21-79
+-------------------------------|---------|----------|---------|---------|-------------------
+
+Test Suites: 1 failed, 6 passed, 7 total
+Tests:       31 passed, 31 total
+Snapshots:   0 total
+Time:        9.995 s
 ---
 
 ### **Features**
