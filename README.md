@@ -118,6 +118,8 @@ src/
     ├── market-analysis
     │   ├── market-analysis.service.spec.ts
     │   └── market-analysis.service.ts
+    ├── products
+    │   └── products.service.ts
     ├── profit-gathering
     │   ├── profit-gathering.service.spec.ts
     │   └── profit-gathering.service.ts
