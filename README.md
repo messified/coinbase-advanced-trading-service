@@ -6,7 +6,7 @@
  - Medium: [https://medium.com/@Jesse_Reese](https://medium.com/@Jesse_Reese)  
  - Github: [https://github.com/messified](https://github.com/messified)
 
-### Project Status:Early Development
+### Project Status: **Early Development**
 
 A comprehensive trading service for analyzing trading pairs, executing trades, and gathering profits. This project integrates with the Coinbase SDK and provides robust services for trading operations.
 
