@@ -3,7 +3,6 @@ import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
 import { TradingController } from './api/trading/trading.controller';
 import { CoinbaseService } from './services/coinbase/coinbase.service';
-import { CustomConfigService } from './services/config/custom-config.service';
 import { ProfitGatheringService } from './services/profit-gathering/profit-gathering.service';
 import { TradeAnalysisService } from './services/trade-analysis/trade-analysis.service';
 import { TradingService } from './services/trading/trading.service';
@@ -19,7 +18,6 @@ import { ProductService } from './services/product/product.service';
   ],
   controllers: [TradingController],
   providers: [
-    CustomConfigService,
     CoinbaseService,
     TradeAnalysisService,
     {

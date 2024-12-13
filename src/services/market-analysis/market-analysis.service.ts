@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CustomConfigService } from '../config/custom-config.service';
+import { CoinbaseService } from '../coinbase/coinbase.service';
 
 interface MarketAnalysisResult {
   bestShortTermCoins: string[];
@@ -19,7 +19,7 @@ interface MarketAnalysisResult {
 export class MarketAnalysisService {
   private readonly logger = new Logger(MarketAnalysisService.name);
 
-  constructor(private readonly configService: CustomConfigService) {}
+  constructor(private readonly coinbaseService: CoinbaseService) {}
 
   /**
    * Analyze the market and return a list of coins for short-term and long-term trades.
@@ -31,7 +31,7 @@ export class MarketAnalysisService {
     // In a real scenario, you'd fetch and analyze market data here.
     // For now, let's simulate some logic.
     const allCoins = ['BTC', 'ETH', 'SOL', 'ADA', 'DOT', 'MATIC', 'XRP'];
-    const priorityCoins = this.configService.getPriorityCoins();
+    const priorityCoins = this.coinbaseService.getPriorityCoins();
 
     // Simulate short-term candidates (e.g., volatile and trending in the last few days)
     const bestShortTermCoins = ['ETH', 'SOL'].filter((coin) => allCoins.includes(coin));

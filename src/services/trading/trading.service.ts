@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CoinbaseService } from '../coinbase/coinbase.service';
-import { CustomConfigService } from '../config/custom-config.service';
 import { Trade } from '../../interfaces/coinbase.interface';
 import { MarketAnalysisService } from '../market-analysis/market-analysis.service';
 
@@ -10,7 +9,6 @@ export class TradingService {
 
   constructor(
     private readonly coinbaseService: CoinbaseService,
-    private readonly configService: CustomConfigService,
     private readonly marketAnalysisService: MarketAnalysisService, // Injected here
   ) {}
 
@@ -18,7 +16,7 @@ export class TradingService {
    * Analyzes priority coins and attempts trades for available wallets.
    */
   async analyzeAndTrade(): Promise<void> {
-    const priorityCoins = this.configService.getPriorityCoins();
+    const priorityCoins = this.coinbaseService.getPriorityCoins();
     if (!priorityCoins.length) {
       this.logger.warn('No priority coins configured.');
       return;
@@ -54,7 +52,7 @@ export class TradingService {
   }
 
   async analyzeOnly(): Promise<any[]> {
-    const priorityCoins = this.configService.getPriorityCoins();
+    const priorityCoins = this.coinbaseService.getPriorityCoins();
     this.logger.log(`Analyzing priority coins: ${priorityCoins.join(', ')}`);
 
     const wallets = await this.coinbaseService.listWallets();

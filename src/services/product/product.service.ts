@@ -1,47 +1,59 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError, AxiosHeaders, AxiosResponse } from 'axios';
 import { catchError, Observable, firstValueFrom } from 'rxjs';
 import { CoinbaseService } from '../coinbase/coinbase.service';
-import { ConfigService } from '@nestjs/config';
 import { Product } from 'src/interfaces/coinbase.interface';
+import { CoinbaseRequest } from '../../interfaces/coinbase.interface';
 
 @Injectable()
 export class ProductService {
-    constructor(
-        private readonly httpService: HttpService,
-        private readonly coinbaseService: CoinbaseService,
-        private readonly configService: ConfigService
-    ) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly coinbaseService: CoinbaseService,
+  ) {}
 
-    async getProducts(): Promise<Product[]> {
-        const token = this.coinbaseService.generateJWT();
-        const agent = this.configService.get('USER_AGENT');
+  async getProducts(): Promise<Product[]> {
+    const endpoint = '/products';
+    const coinbaseRequest: CoinbaseRequest = await this.coinbaseService.buildRequest(endpoint);
+    
+    const headers = {
+      'User-Agent': coinbaseRequest.userAgent,
+      'Content-Type': coinbaseRequest.contentType,
+      Authorization: coinbaseRequest.token,
+    };
 
-        const headers = {
-            'User-Agent': agent,
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        };
+    const response: any = await firstValueFrom(
+      this.httpService.get<any[]>(coinbaseRequest.uri, { headers }).pipe(
+        catchError((error: AxiosError) => {
+          console.log(error.response);
+          throw 'An error happened!';
+        }),
+      ),
+    );
+    
+    return response.data.products;
+  }
 
-        const { response }: any = await firstValueFrom(
-        this.httpService.get<any[]>('https://api.coinbase.com/api/v3/brokerage/products', { headers }).pipe(
-            catchError((error: AxiosError) => {
-                console.log(error.response);
-                throw 'An error happened!';
-            }),
-        ),
-        );
+  async getProduct(productId: string): Promise<AxiosResponse<any[]>> {
+    const endpoint = `/products/${productId}`;
+    const coinbaseRequest: CoinbaseRequest = await this.coinbaseService.buildRequest(endpoint);
+    
+    const headers = {
+      'User-Agent': coinbaseRequest.userAgent,
+      'Content-Type': coinbaseRequest.contentType,
+      Authorization: coinbaseRequest.token,
+    };
 
-        return response.data;
-    }
+    const { response }: any = await firstValueFrom(
+      this.httpService.get<any[]>(coinbaseRequest.uri, { headers }).pipe(
+        catchError((error: AxiosError) => {
+          console.log(error.response);
+          throw 'An error happened!';
+        }),
+      ),
+    );
 
-    getProduct(productId: string): Observable<AxiosResponse<any[]>> {
-        const token = this.coinbaseService.generateJWT();
-        const headers = {
-            Authorization: `Bearer ${token}`,
-        };
-
-        return this.httpService.get(`https://api.coinbase.com/api/v3/brokerage/products/${productId}`, { headers });
-    }
+    return response.data;
+  }
 }

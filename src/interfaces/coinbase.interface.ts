@@ -1,3 +1,10 @@
+export interface CoinbaseRequest {
+  userAgent: string;
+  contentType: string;
+  token: string;
+  uri: string;
+}
+
 export interface Trade {
   amount: string; // or number, depending on SDK
   fromAssetId: string;
