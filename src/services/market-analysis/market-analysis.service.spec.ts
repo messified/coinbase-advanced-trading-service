@@ -1,22 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MarketAnalysisService } from './market-analysis.service';
-import { CustomConfigService } from '../config/custom-config.service';
+import { CoinbaseService } from '../coinbase/coinbase.service';
 
 describe('MarketAnalysisService', () => {
   let service: MarketAnalysisService;
-  let configService: Partial<jest.Mocked<CustomConfigService>>;
+  let coinbaseService: Partial<jest.Mocked<CoinbaseService>>;
 
   beforeEach(async () => {
-    configService = {
+    coinbaseService = {
       getPriorityCoins: jest.fn(),
     };
 
-    (configService.getPriorityCoins as jest.Mock).mockReturnValue(['BTC', 'ETH', 'SOL']);
+    (coinbaseService.getPriorityCoins as jest.Mock).mockReturnValue(['BTC', 'ETH', 'SOL']);
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         MarketAnalysisService,
-        { provide: CustomConfigService, useValue: configService },
+        { provide: CoinbaseService, useValue: coinbaseService },
       ],
     }).compile();
 

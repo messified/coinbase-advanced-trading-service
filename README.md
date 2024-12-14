@@ -1,10 +1,13 @@
 # **Coinbase Trading Service - NestJS**
 
- - Author: **Jesse Reese**  
- - Website: [https://jessereese.com/](https://jessereese.com/)  
- - LinkedIn: [https://www.linkedin.com/in/jcreese/](https://www.linkedin.com/in/jcreese/)  
- - Medium: [https://medium.com/@Jesse_Reese](https://medium.com/@Jesse_Reese)  
- - Github: [https://github.com/messified](https://github.com/messified)
+<p align="center" dir="auto">
+<a href="https://nestjs.com/" rel="nofollow"><img src="https://camo.githubusercontent.com/4b0000b8e7a6449a924fe0212093b9f3936ef80cc8fdfbb770baad58f58b8c2c/68747470733a2f2f6e6573746a732e636f6d2f696d672f6c6f676f2d736d616c6c2e737667" width="120" alt="Nest Logo" data-canonical-src="https://nestjs.com/img/logo-small.svg" style="max-width: 100%;"></a>
+<a href="https://docs.cdp.coinbase.com/" width="100" alt="Coinbase Logo" style="max-width: 100%;">
+<img itemprop="image" class="avatar flex-shrink-0 mb-3 mr-3 mb-md-0 mr-md-4" src="https://avatars.githubusercontent.com/u/1885080?s=200&amp;v=4" width="100" height="100" alt="@coinbase">
+</a>
+</p>
+
+#### STATUS: **Early Development**
 
 A comprehensive trading service for analyzing trading pairs, executing trades, and gathering profits. This project integrates with the Coinbase SDK and provides robust services for trading operations.
 
@@ -88,16 +91,20 @@ Time:        9.995 s
 
 4. Set up your environment variables in a `.env` file:
    ```dotenv
-    PRIORITY_COINS='BTC,ETH,SOL,ADA,XRP,DNT,PEPE,AMP'
-    INVESTMENT=10
-    COINBASE_API_KEY_NAME=''
-    COINBASE_PRIVATE_KEY=''
-    BASE_URL = 'api.coinbase.com';
-    API_PREFIX = '/api/v3/brokerage';
-    ALGORITHM = 'ES256';
-    VERSION = '0.1.0';
-    USER_AGENT = 'coinbase-advanced-ts/0.1.0';
-    JWT_ISSUER = 'cdp';
+   PRIORITY_COINS='BTC,ETH,SOL,ADA,XRP,DNT,PEPE,AMP'
+   INVESTMENT=10
+   COINBASE_API_KEY_NAME=''
+   COINBASE_PRIVATE_KEY=''
+   REQUEST_HOST='api.coinbase.com'
+   REQUEST_PATH ='/api/v3/brokerage'
+   ALGORITHM=ES256
+   VERSION='0.1.0'
+   USER_AGENT='coinbase-advanced-ts/0.1.0'
+   JWT_ISSUER='cdp'
+   CONTENT_TYPE='application/json'
+
+   PRACTICE_MODE=1
+   PRACTICE_WALLET=1000
    ```
 
 ---
@@ -140,7 +147,6 @@ src/
 .
 ├── api
 │   └── trading
-│       ├── trading.controller.spec.ts
 │       └── trading.controller.ts
 ├── app.module.ts
 ├── interfaces
@@ -150,14 +156,11 @@ src/
     ├── coinbase
     │   ├── coinbase.service.spec.ts
     │   └── coinbase.service.ts
-    ├── config
-    │   ├── custom-config.service.spec.ts
-    │   └── custom-config.service.ts
     ├── market-analysis
     │   ├── market-analysis.service.spec.ts
     │   └── market-analysis.service.ts
-    ├── products
-    │   └── products.service.ts
+    ├── product
+    │   └── product.service.ts
     ├── profit-gathering
     │   ├── profit-gathering.service.spec.ts
     │   └── profit-gathering.service.ts
@@ -172,6 +175,12 @@ src/
 
 ---
 
-### **License**
+## **License**
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Stay in Touch
+
+ - Author: [Jesse Reese](https://www.linkedin.com/in/jcreese/)
+ - Website: [https://jessereese.com/](https://jessereese.com/)
+ - Medium: [https://medium.com/@Jesse_Reese](https://medium.com/@Jesse_Reese)
