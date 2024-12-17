@@ -26,6 +26,7 @@ export class TradingController {
       };
     } catch (error) {
       this.logger.error('Error executing trading process:', error.message);
+      
       throw new InternalServerErrorException(
         'An error occurred while executing the trading process.',
       );
@@ -35,7 +36,9 @@ export class TradingController {
   @Get('/analyze')
   async analyze() {
     this.logger.log('Retrieving analytics data...');
+
     const analysis = await this.tradingService.analyzeOnly();
+
     return { success: true, data: analysis };
   }
 
@@ -47,9 +50,11 @@ export class TradingController {
     this.logger.log('Retrieving market analysis data...');
     try {
       const analysis = await this.tradingService.getMarketAnalysis();
+
       return { success: true, data: analysis };
     } catch (error) {
       this.logger.error('Error retrieving market analysis data:', error.message);
+
       throw new InternalServerErrorException(
         'An error occurred while retrieving market analysis data.',
       );
